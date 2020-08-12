@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np 
 
 
-#@tf.function
+# @tf.function
 def gen_coord_2d(r_in, neigh_list, L, 
                  av = tf.constant([0.0, 0.0], dtype = tf.float32),
                  std =  tf.constant([1.0, 1.0], dtype = tf.float32)):

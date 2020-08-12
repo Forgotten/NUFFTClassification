@@ -101,7 +101,7 @@ if not path.exists(dataFile):
 # extracting the data
 hf = h5py.File(dataFile, 'r')
 
-labels_array = hf['labels'][:]
+labels_array = np.array(hf['labels'][:], dtype=np.int32)
 points_array = np.array(hf['points'][:], dtype=np.float32)
 
 labels_array_tf = tf.Variable(labels_array)
@@ -187,6 +187,8 @@ class DeepMDClassification(tf.keras.Model):
       
     # (Nsamples, n_points_sample)
     # in this case we are only considering the distances
+    # print(type(inputs))
+    # print(inputs.shape)
     gen_coordinates = gen_coord_2d(inputs, 
                                    neigh_list, self.L, 
                                    self.av, self.std) # this need to be fixed
