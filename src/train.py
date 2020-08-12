@@ -1,6 +1,5 @@
 import tensorflow as tf
 
-
 @tf.function
 def train_step(model, optimizer, loss, 
                inputs, neigh_list, labels):
