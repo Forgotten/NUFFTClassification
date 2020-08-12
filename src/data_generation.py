@@ -3,6 +3,52 @@
 import numpy as np
 
 
+def generate_data(n_samples, n_point_samples, L, r_min, r_max):
+  
+  # safe guards 
+  assert r_min <= r_max
+  assert r_max < L/2 
+
+  points_array = np.zeros((n_samples, n_point_samples, 2))
+  # we will use a one-hot encoding 
+  label_array = np.zeros((n_samples, 2), dtype=int)
+
+  for i in range(n_samples):
+    type_rand = np.int(np.random.rand(1)[0] < 0.5)
+    
+    # we randomly create a center point
+    center = np.random.rand(1,2)*L/2 + L/4
+    radious = r_min + (r_max - r_min)*np.random.rand(1)[0]
+
+    # we generate a triangle
+    if type_rand == 0 :
+
+      # we create the triangle 
+      triang_points = create_triangle(center, radious, np.pi/3)
+      
+      sample_triang = sample_triangle(triang_points, 
+                                      n_point_samples)
+
+      points_array[i,:,:] = sample_triang
+      label_array[i,:] = np.array([1, 0])
+
+    # we generate a quadrilateral
+    if type_rand == 1 :
+
+      # we create the triangle 
+      quad_points = create_quadrilateral(center, 
+                                         radious, 
+                                         np.pi/4)
+      
+      sample_quad = sample_quadrilateral(quad_points, 
+                                        n_point_samples)
+
+      points_array[i,:,:] = sample_quad
+      label_array[i,:] = np.array([0, 1])
+
+  return (label_array, points_array)
+
+
 def sample_side(points_vertices, rel_dist):
   assert 0 <= rel_dist and rel_dist <= 1
 
@@ -28,11 +74,18 @@ def create_polygon(center, outer_rad, n_sides):
 
   return points
 
-def create_triangle(center, outer_rad): 
+def create_triangle(center, outer_rad, min_angle = 0): 
   # we check that center has the proper dimensions 
 
   assert center.shape[0] == 1 and center.shape[1] == 2 
-  angles = np.random.rand(3,1)*2*np.pi
+  # condition so the triangle can be built
+  assert min_angle <= 2*np.pi/3
+
+  angles = np.sort(np.random.rand(3,1)*2*np.pi, axis = 0)
+
+  # we make sure that the circular different is large enough
+  while min_circ_dist(angles) < min_angle :
+    angles = np.sort(np.random.rand(3,1)*2*np.pi, axis = 0)
 
   coord_x = center[0,0] + outer_rad*np.cos(angles)
   coord_y = center[0,1] + outer_rad*np.sin(angles) 
@@ -116,7 +169,7 @@ def sample_quadrilateral(points, n_samples):
   return points_out
 
 def main():
-    print("testing the generation of data")
+  print("testing the generation of data")
 
   print("testing the sample side")
 

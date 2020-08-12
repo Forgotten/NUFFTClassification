@@ -17,7 +17,9 @@ class DenseLayer(tf.keras.layers.Layer):
     self.bias = self.add_weight("bias",
                                 initializer=tf.initializers.zeros(),    
                                 shape=[self.num_outputs,])
-  @tf.function
+
+
+  @tf.function(experimental_relax_shapes=True)
   def call(self, input):
     return tf.matmul(input, self.kernel) + self.bias
 
@@ -52,7 +54,8 @@ class PyramidLayer(tf.keras.layers.Layer):
       self.bias.append(self.add_weight("bias"+str(n),
                          shape=[k,]))
 
-  @tf.function
+
+  @tf.function(experimental_relax_shapes=True)
   def call(self, input):
     # first application
     x = self.actfn(tf.matmul(input, self.kernel[0]) + self.bias[0])

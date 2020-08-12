@@ -1,42 +1,59 @@
 import tensorflow as tf
 import numpy as np 
-from numba import jit 
 
-@tf.function
-def gen_coord(Rin, neighList, L, 
-              av = tf.constant([0.0], dtype = tf.float32),
-              std =  tf.constant([1.0], dtype = tf.float32)):
+
+#@tf.function
+def gen_coord_2d(r_in, neigh_list, L, 
+                 av = tf.constant([0.0, 0.0], dtype = tf.float32),
+                 std =  tf.constant([1.0, 1.0], dtype = tf.float32)):
     # This function follows the same trick 
     # function to generate the generalized coordinates for periodic data
-    # the input has dimensions (n_samples, Ncells*Np)
-    # the ouput has dimensions (n_samples*Ncells*Np*(3*Np-1), 2)
+    # the input has dimensions (Nsamples, Ncells*Np)
+    # the ouput has dimensions (Nsamples*Ncells*Np*(3*Np-1), 2)
     # we try to allocate an array before hand and use high level
     # tensorflow operations
 
-    # neighList is a (Nsample, Npoints, maxNeigh)
+    # neigh_list is a (Nsample, Npoints, maxNeigh)
 
     # add assert with respect to the input shape 
-    n_samples = Rin.shape[0]
-    # maximum number of neighbors
-    max_neighs = neighList.shape[-1]
+    Nsamples = r_in.shape[0]
+    max_num_neighs = neigh_list.shape[-1]
 
-    mask = neighList > -1
+    mask = neigh_list > -1
 
-    RinRep  = tf.tile(tf.expand_dims(Rin, -1),[1 ,1,max_neighs])
-    RinGather = tf.gather(Rin, neighList, batch_dims = 1, axis = 1)
+    # we try per dimension first
+    r_in_rep_x = tf.tile(tf.expand_dims(r_in[:,:,0], -1),[1 ,1, max_num_neighs] )
+    r_gather_x = tf.gather(r_in[:,:,0], neigh_list, batch_dims = 1, axis = 1)
 
-    # substracting 
-    R_Diff = RinGather - RinRep
+    r_in_rep_y  = tf.tile(tf.expand_dims(r_in[:,:,1], -1),[1 ,1, max_num_neighs] )
+    r_gather_y = tf.gather(r_in[:,:,1], neigh_list, batch_dims = 1, axis = 1)
 
-    # we impose periodicity (To reconsider)
-    R_Diff = R_Diff - L*tf.round(R_Diff/L)
+    # substracting  in X
+    r_diff_x = r_gather_x - r_in_rep_x
+    r_diff_x = r_diff_x - L*tf.round(r_diff_x/L)
 
-    bnorm = (tf.abs(R_Diff) - av[0])/std[0]
+    # substracting in Y 
+    r_diff_y = r_gather_y - r_in_rep_y
+    r_diff_y = r_diff_y - L*tf.round(r_diff_y/L)
 
-    zeroDummy = tf.zeros_like(bnorm)
-
-    bnorm_safe = tf.where(mask, bnorm, zeroDummy)
+    # computing the norm 
+    norm = tf.sqrt(tf.square(r_diff_x) + tf.square(r_diff_y))
+    # computing the normalized norm
+    # bnorm = (tf.abs(norm) - av[0])/std[0]
     
-    R_total = tf.reshape(bnorm_safe, (n_samples,-1,max_neighs))
+    binv = tf.math.reciprocal(norm) 
+
+    bx = tf.math.multiply(r_diff_x,binv)
+    by = tf.math.multiply(r_diff_y,binv)
+
+    zeroDummy = tf.zeros_like(norm)
+
+    binv_safe = tf.where(mask, (binv- av[0])/std[0], zeroDummy)
+    bx_safe = tf.where(mask, bx, zeroDummy)
+    by_safe = tf.where(mask, by, zeroDummy)
+    
+    R_total = tf.concat([tf.reshape(binv_safe, (-1,1)), 
+                         tf.reshape(bx_safe,    (-1,1)), 
+                         tf.reshape(by_safe,    (-1,1)) ], axis = 1)
 
     return R_total
