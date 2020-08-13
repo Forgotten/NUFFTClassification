@@ -157,7 +157,7 @@ loss_cross = tf.keras.losses.CategoricalCrossentropy(from_logits = True,
 initialLearningRate = learningRate
 lrSchedule = tf.keras.optimizers.schedules.ExponentialDecay(
              initialLearningRate,
-             decay_steps=(n_samples//batch_sizeArray[0])*epochsPerStair,
+             decay_steps=(n_samples//batch_size)*epochsPerStair,
              decay_rate=decayRate,
              staircase=True)
 
