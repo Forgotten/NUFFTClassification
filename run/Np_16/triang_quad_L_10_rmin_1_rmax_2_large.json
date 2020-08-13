@@ -1,0 +1,26 @@
+{
+    "with_distrib":     false,
+    "_comment":         " model parameters",
+    "seed":             1234567891011121314,
+    "filterNet":        [2, 4, 8, 16, 32],
+    "fittingNet":       [32, 32, 32, 32, 32, 32],
+    "nPointSamples":     16,
+    "lengthCell":        10.0,
+    "nSamples":          10000,
+    "minR":              1.0,
+    "maxR":              2.0,
+    "dataFolder":       "../../data/",
+    "loadFile" :        "",
+    "epochsPerStair":    10,
+    "batchSize":         10,
+    "numberEpoch" :      1000,
+    "learningRate" :     0.001,
+    "decayRate" :        0.95,
+    "widowWidth":        3.0,
+    "widowTransition":   0.5,
+    "maxNumNeighbors":    15,
+    "radious":           4.0,
+    "smoothRadious":     1.0,
+    "_comment":         "that's all"
+}
+
