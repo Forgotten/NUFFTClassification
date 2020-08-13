@@ -116,16 +116,39 @@ points_array = np.array(hf['points'][:], dtype=np.float32)
 # Defining the Keras model 
 model = keras.Sequential()
 model.add(keras.Input(shape=(n_point_samples, 2)))  # 250x250 RGB images
+
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.AveragePooling1D(2))
+
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.AveragePooling1D(2))
+
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.AveragePooling1D(2))
+
 model.add(layers.Flatten())
+
 model.add(layers.Dense(filter_channel, activation="relu"))
-model.add(layers.BatchNormalization())
 model.add(layers.Dense(filter_channel, activation="relu"))
-model.add(layers.BatchNormalization())
-model.add(layers.Dense(filter_channel, activation="relu"))
-model.add(layers.BatchNormalization())
-model.add(layers.Dense(filter_channel, activation="relu"))
-model.add(layers.BatchNormalization())
-model.add(layers.Dense(filter_channel, activation="relu"))
+
 model.add(layers.Dense(2))
 
 
