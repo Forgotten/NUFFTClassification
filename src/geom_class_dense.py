@@ -140,7 +140,7 @@ model.add(layers.Flatten())
 model.add(layers.Dense(filter_channel, activation="relu"))
 model.add(layers.Dense(filter_channel, activation="relu"))
 
-model.add(layers.Dense(2, activation="None"))
+model.add(layers.Dense(2))
 
 
 # Printing Keras model
