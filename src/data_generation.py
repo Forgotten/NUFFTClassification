@@ -142,6 +142,9 @@ def sample_triangle(points, n_samples):
 
   points_out = np.concatenate([points, np.array(points_out)], axis = 0)
 
+  # adding a random shuffle to the points
+  np.random.shuffle(points_out)
+
   return points_out
 
 
@@ -165,6 +168,9 @@ def sample_quadrilateral(points, n_samples):
       points_out.append(sample_side(points[[3, 0], :], pos-3))
 
   points_out = np.concatenate([points, np.array(points_out)], axis = 0)
+
+  # adding a random shuffle to the points
+  np.random.shuffle(points_out)
 
   return points_out
 
