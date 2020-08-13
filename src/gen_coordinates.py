@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np 
 
 
-# @tf.function
+@tf.function
 def gen_coord_2d(r_in, neigh_list, L, 
                  av = tf.constant([0.0, 0.0], dtype = tf.float32),
                  std =  tf.constant([1.0, 1.0], dtype = tf.float32)):
@@ -48,11 +48,11 @@ def gen_coord_2d(r_in, neigh_list, L,
 
     zeroDummy = tf.zeros_like(norm)
 
-    binv_safe = tf.where(mask, (binv- av[0])/std[0], zeroDummy)
+    binv_safe = tf.where(mask, (norm - av[0])/std[0], zeroDummy)
     bx_safe = tf.where(mask, bx, zeroDummy)
     by_safe = tf.where(mask, by, zeroDummy)
     
-    R_total = tf.concat([tf.reshape(binv_safe, (-1,1)), 
+    R_total = tf.concat([tf.reshape(binv_safe,  (-1,1)), 
                          tf.reshape(bx_safe,    (-1,1)), 
                          tf.reshape(by_safe,    (-1,1)) ], axis = 1)
 
