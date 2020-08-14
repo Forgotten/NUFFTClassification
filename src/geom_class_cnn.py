@@ -186,6 +186,6 @@ loss_metric = tf.keras.metrics.Mean()
 
 model.compile(optimizer=optimizer, loss=loss_cross, metrics=['accuracy', 'mse'])
 
-model.fit(points_array, labels_array, epochs=n_epochs, validation_split=0.1)
+model.fit(points_array, labels_array, epochs=n_epochs, validation_split=0.1,  verbose=2)
 
 
