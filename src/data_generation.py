@@ -153,7 +153,7 @@ def sample_quadrilateral(points, n_samples):
 
   assert n_samples >= points.shape[0]
 
-  rand_pos = points.shape[0]*np.random.rand(n_samples-points.shape[0])
+  rand_pos = 4*np.random.rand(n_samples-points.shape[0])
 
   points_out = []
 
@@ -164,8 +164,8 @@ def sample_quadrilateral(points, n_samples):
       points_out.append(sample_side(points[[1, 2], :], pos-1))
     elif pos < 3 :
       points_out.append(sample_side(points[[2, 3], :], pos-2))
-    elif pos < 4 :
-      points_out.append(sample_side(points[[3, 0], :], pos-3))
+    else :
+      points_out.append(sample_side(points[[0, 3], :], pos-3))
 
   points_out = np.concatenate([points, np.array(points_out)], axis = 0)
 
