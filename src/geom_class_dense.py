@@ -3,7 +3,7 @@
 
 # I use the regular keras layuers for simplicity
 import tensorflow as tf 
-if len(tf.config.list_physical_devices('GPU')) > 0 
+if len(tf.config.list_physical_devices('GPU')) > 0 :
   gpus = tf.config.experimental.list_physical_devices('GPU')
   tf.config.experimental.set_memory_growth(gpus[0], True)
 
