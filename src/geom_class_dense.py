@@ -3,8 +3,9 @@
 
 # I use the regular keras layuers for simplicity
 import tensorflow as tf 
-gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(gpus[0], True)
+if len(tf.config.list_physical_devices('GPU')) > 0 
+  gpus = tf.config.experimental.list_physical_devices('GPU')
+  tf.config.experimental.set_memory_growth(gpus[0], True)
 
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -75,7 +76,7 @@ tf.random.set_seed(seed)
 dataFile = dataFolder + "data_geom_classification_"+ \
                         "_r_min_%.4f"%(r_min) + \
                         "_r_max_%.4f"%(r_max) + \
-                        "_L_%.4f"%(r_max) + \
+                        "_L_%.4f"%(L) + \
                         "_n_samples_" + str(n_samples) + \
                         "_n_samples_per_point_" + str(n_point_samples) + ".h5"
 
@@ -85,7 +86,7 @@ checkFile = checkFolder + "checkpoint_" + nameScript + \
                           "_data_geom_classification_"+ \
                           "_r_min_%.4f"%(r_min) + \
                           "_r_max_%.4f"%(r_max) + \
-                          "_L_%.4f"%(r_max) + \
+                          "_L_%.4f"%(L) + \
                           "_n_samples_" + str(n_samples) + \
                           "_n_samples_per_point_" + str(n_point_samples)
 

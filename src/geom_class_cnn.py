@@ -3,8 +3,9 @@
 
 # I use the regular keras layuers for simplicity
 import tensorflow as tf 
-gpus = tf.config.experimental.list_physical_devices('GPU')
-tf.config.experimental.set_memory_growth(gpus[0], True)
+if len(tf.config.list_physical_devices('GPU')) > 0 
+  gpus = tf.config.experimental.list_physical_devices('GPU')
+  tf.config.experimental.set_memory_growth(gpus[0], True)
 
 from tensorflow import keras
 from tensorflow.keras import layers
@@ -119,28 +120,29 @@ model.add(keras.Input(shape=(n_point_samples, 2)))  # 250x250 RGB images
 
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.AveragePooling1D(2))
 
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.AveragePooling1D(2))
 
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.BatchNormalization())
-model.add(tf.keras.layers.Dropout(.2))
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.AveragePooling1D(2))
+
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
+model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
+model.add(layers.BatchNormalization())
 model.add(layers.Conv1D(filter_channel, 1, strides=1, activation="relu"))
 model.add(layers.AveragePooling1D(2))
 
@@ -149,8 +151,16 @@ model.add(layers.Flatten())
 model.add(layers.Dense(filter_channel, activation="relu"))
 model.add(layers.Dense(filter_channel, activation="relu"))
 
+# model.add(layers.BatchNormalization())
+# model.add(layers.Dense(filter_channel, activation="relu"))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Dense(filter_channel, activation="relu"))
+# model.add(layers.BatchNormalization())
+# model.add(layers.Dense(filter_channel, activation="relu"))
+
 model.add(layers.Dense(2))
 
+model.summary()
 
 # Printing Keras model
 
