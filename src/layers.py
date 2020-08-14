@@ -74,3 +74,25 @@ class PyramidLayer(tf.keras.layers.Layer):
       else :
         x = self.actfn(tf.matmul(x, ker) + b)
     return x
+
+
+class ResNetUnitConv1D(keras.layers.Layer):
+  def __init__(self,out_channels):
+    super(MLPBlock, self).__init__()
+
+    self.conv_layer1 = layers.Conv1D(filter_channel, 1, strides=1)
+    self.batch_norm1 = layers.BatchNormalization()
+    self.conv_layer2 = layers.Conv1D(filter_channel, 1, strides=1)
+    self.batch_norm2 = layers.BatchNormalization()
+
+
+  def call(self, inputs):
+
+    x = self.conv_layer1(inputs)
+    x = self.batch_norm1(x)
+    x = tf.nn.relu(x)
+    x = self.conv_layer2(x)
+    x = x + inputs
+    x = self.batch_norm2(x)
+
+    return tf.nn.relu(x)
